@@ -7,7 +7,7 @@ DINOHUB.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 
 do local GUI = game.CoreGui:FindFirstChild("1xliiui");if GUI then GUI:Destroy();end;if _G.Color == nil then
-       _G.Color = Color3.fromRGB(17, 0, 255)
+       _G.Color = Color3.fromRGB(124, 4, 10)
    end 
 end
 
