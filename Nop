@@ -1,7 +1,7 @@
 local DINOHUB = Instance.new("ScreenGui")
 local OPENCLOSE = Instance.new("TextButton")
 
-DINOHUB.Name = "Nub Hub"
+DINOHUB.Name = "Fated"
 DINOHUB.Parent = game.CoreGui
 DINOHUB.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -76,7 +76,7 @@ function Update:Window(text,logo,keybind)
 	local yoo = string.gsub(tostring(keybind),"Enum.KeyCode.","")
 	
 	local SOMEXHUB = Instance.new("ScreenGui")
-	SOMEXHUB.Name = "Nub Hub"
+	SOMEXHUB.Name = "Fated"
 	SOMEXHUB.Parent = game.CoreGui
 	SOMEXHUB.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -1042,7 +1042,7 @@ elseif placeId == 7449423635 then
 	Three_World = true
 end
 
-local Library = Update:Window("Nop V1","",Enum.KeyCode.RightControl);
+local Library = Update:Window("Fated V1","",Enum.KeyCode.RightControl);
 local main = Library:Tab("Main")
 local AutoFarm = Library:Tab("AutoFarm")
 local Auto = Library:Tab("Auto")
