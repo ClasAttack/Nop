@@ -1069,7 +1069,7 @@ end
 local version = game:HttpGet("https://raw.githubusercontent.com/accountnop/magmaisgay/main/version")
 local logs = game:HttpGet("https://raw.githubusercontent.com/ClasAttack/BloxFruits11/main/logs")
 
-main:Label("Welcome "..game.Players.LocalPlayer.DisplayName.. " To Nop v1")
+main:Label("Welcome "..game.Players.LocalPlayer.DisplayName.. " To Fated!")
 main:Label("By Clas")
 main:Label("Congrats | FateLinked | Clas | Goblin")
 main:Label("Version:"..version)
