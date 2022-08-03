@@ -4031,8 +4031,8 @@ Dungeon:Toggle("ESP Flower",espflower,function(a)
 							bill.Adornee = v.Character.Head
 							bill.AlwaysOnTop = true
 							local name = Instance.new('TextLabel',bill)
-							name.Font = "GothamBold"
-							name.FontSize = "Size14"
+							name.Font = "Tahoma"
+							name.FontSize = "Size9"
 							name.TextWrapped = true
 							name.Text = (v.Name ..' \n'.. round((game:GetService('Players').LocalPlayer.Character.Head.Position - v.Character.Head.Position).Magnitude/3) ..' M')
 							name.Size = UDim2.new(1,0,1,0)
@@ -4070,8 +4070,8 @@ Dungeon:Toggle("ESP Flower",espflower,function(a)
 								bill.Adornee = v
 								bill.AlwaysOnTop = true
 								local name = Instance.new('TextLabel',bill)
-								name.Font = "GothamBold"
-								name.FontSize = "Size14"
+								name.Font = "Tahoma"
+								name.FontSize = "Size9"
 								name.TextWrapped = true
 								name.Size = UDim2.new(1,0,1,0)
 								name.TextYAlignment = 'Top'
@@ -4115,14 +4115,14 @@ Dungeon:Toggle("ESP Flower",espflower,function(a)
 							bill.Adornee = v.Handle
 							bill.AlwaysOnTop = true
 							local name = Instance.new('TextLabel',bill)
-							name.Font = "GothamBold"
-							name.FontSize = "Size14"
+							name.Font = "Tahoma"
+							name.FontSize = "Size9"
 							name.TextWrapped = true
 							name.Size = UDim2.new(1,0,1,0)
 							name.TextYAlignment = 'Top'
 							name.BackgroundTransparency = 1
 							name.TextStrokeTransparency = 0.5
-							name.TextColor3 = Color3.fromRGB(255, 0, 0)
+							name.TextColor3 = Color3.fromRGB(13, 178, 255)
 							name.Text = (v.Name ..' \n'.. round((game:GetService('Players').LocalPlayer.Character.Head.Position - v.Handle.Position).Magnitude/3) ..' M')
 						else
 							v.Handle['NameEsp'..Number].TextLabel.Text = (v.Name ..'   \n'.. round((game:GetService('Players').LocalPlayer.Character.Head.Position - v.Handle.Position).Magnitude/3) ..' M')
