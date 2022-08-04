@@ -2,7 +2,7 @@ local DINOHUB = Instance.new("ScreenGui")
 local OPENCLOSE = Instance.new("TextButton")
 
 DINOHUB.Name = "Fated"
-DINOHUB.Parent = game.CoreGui
+DINOHUB.Parent = game.CoreGui 
 DINOHUB.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 
@@ -1050,6 +1050,7 @@ local Stats = Library:Tab("Stats")
 local tp = Library:Tab("Teleport")
 local Dungeon = Library:Tab("Raid + Esp")
 local DevilFruit = Library:Tab("DevilFruit")
+local DevilFruitMS = Library:Tab("DevilFruit Mastery")
 local Shop = Library:Tab("Shop")
 local Misc = Library:Tab("Misc")
 local Setting = Library:Tab("Setting")
@@ -3995,6 +3996,14 @@ Dungeon:Toggle("ESP Flower",espflower,function(a)
 		FlowerESP = a
 		UpdateFlowerChams() 
 	end)
+
+Dungeon:Toggle("ESP lsland",IslandESP,function(value)
+        IslandESP = value
+        while IslandESP do wait()
+            UpdateIslandESP() 
+        end
+    end)
+
     spawn(function()
 		while wait() do
 			if FlowerESP then
@@ -4009,6 +4018,10 @@ Dungeon:Toggle("ESP Flower",espflower,function(a)
 			if ESPPlayer then
 				UpdatePlayerChams()
 			end
+
+            if ESPIsland then 
+                UpdateIslandESP()
+            end
 		end
 	end)
 	function isnil(thing)
@@ -4017,6 +4030,137 @@ Dungeon:Toggle("ESP Flower",espflower,function(a)
 	local function round(n)
 		return math.floor(tonumber(n) + 0.5)
 	end
+
+
+    --DevilFruitMS:Toggle("Auto Farm BF Mastery",_G.AutoFarmFruitMastery,function(value)
+       -- _G.AutoFarmFruitMastery = value
+       --_G.Kill_At = value
+--StopTween(_G.AutoFarmFruitMastery)
+       -- if _G.AutoFarmFruitMastery == false then
+        --    UseSkill = false 
+       -- end
+    --end)
+
+    spawn(function()
+        while wait() do
+            if _G.AutoFarmFruitMastery then
+                pcall(function()
+                    local QuestTitle = game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
+                    if not string.find(QuestTitle, NameMon) then
+                        Magnet = false
+                        UseSkill = false
+                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+                    end
+                    if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
+                        StartMasteryFruitMagnet = false
+                        UseSkill = false
+                        CheckQuest()
+                        repeat wait()
+                            topos(CFrameQuest)
+                        until (CFrameQuest.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3 or not _G.AutoFarmFruitMastery
+                        if (CFrameQuest.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 3 then
+                            wait(1.2)
+                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest",NameQuest,LevelQuest)
+                            wait(0.5)
+                        end
+                    elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
+                        CheckQuest()
+                        if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
+                            for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                                if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                                    if v.Name == Mon then
+                                        if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) then
+                                            HealthMs = v.Humanoid.MaxHealth * _G.Kill_At/100
+                                            repeat task.wait()
+                                                if v.Humanoid.Health <= HealthMs then
+                                                    AutoHaki()
+                                                    EquipWeapon(game:GetService("Players").LocalPlayer.Data.DevilFruit.Value)
+                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                                    v.HumanoidRootPart.CanCollide = false
+                                                    PosMonMasteryFruit = v.HumanoidRootPart.CFrame
+                                                    v.Humanoid.WalkSpeed = 0
+                                                    v.Head.CanCollide = false
+                                                    UseSkill = true
+                                                else           
+                                                    UseSkill = false 
+                                                    AutoHaki()
+                                                    EquipWeapon(_G.SelectWeapon)
+                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                                                    v.HumanoidRootPart.CanCollide = false
+                                                    v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+                                                    PosMonMasteryFruit = v.HumanoidRootPart.CFrame
+                                                    v.Humanoid.WalkSpeed = 0
+                                                    v.Head.CanCollide = false
+                                                end
+                                                StartMasteryFruitMagnet = true
+                                                game:GetService'VirtualUser':CaptureController()
+                                                game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+                                            until not _G.AutoFarmFruitMastery or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
+                                        else
+                                            UseSkill = false
+                                            StartMasteryFruitMagnet = false
+                                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+                                        end
+                                    end
+                                end
+                            end
+                        else
+                            StartMasteryFruitMagnet = false   
+                            UseSkill = false 
+                            local Mob = game:GetService("ReplicatedStorage"):FindFirstChild(Mon) 
+                            if Mob then
+                                topos(Mob.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                            else
+                                if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame.Y <= 1 then
+                                    game:GetService("Players").LocalPlayer.Character.Humanoid.Jump = true
+                                    task.wait()
+                                    game:GetService("Players").LocalPlayer.Character.Humanoid.Jump = false
+                                end
+                            end
+                        end
+                    end
+                end)
+            end
+        end
+    end)
+
+
+
+
+    function UpdateIslandESP() 
+        for i,v in pairs(game:GetService("Workspace")["_WorldOrigin"].Locations:GetChildren()) do
+            pcall(function()
+                if IslandESP then 
+                    if v.Name ~= "Sea" then
+                        if not v:FindFirstChild('NameEsp') then
+                            local bill = Instance.new('BillboardGui',v)
+                            bill.Name = 'NameEsp'
+                            bill.ExtentsOffset = Vector3.new(0, 1, 0)
+                            bill.Size = UDim2.new(1,200,1,30)
+                            bill.Adornee = v
+                            bill.AlwaysOnTop = true
+                            local name = Instance.new('TextLabel',bill)
+                            name.Font = "Highway"
+                            name.FontSize = "Size12"
+                            name.TextWrapped = true
+                            name.Size = UDim2.new(1,0,1,0)
+                            name.TextYAlignment = 'Top'
+                            name.BackgroundTransparency = 1
+                            name.TextStrokeTransparency = 0.5
+                            name.TextColor3 = Color3.fromRGB(229, 255, 0)
+                        else
+                            v['NameEsp'].TextLabel.Text = (v.Name ..'   \n'.. round((game:GetService('Players').LocalPlayer.Character.Head.Position - v.Position).Magnitude/3) ..' M')
+                        end
+                    end
+                else
+                    if v:FindFirstChild('NameEsp') then
+                        v:FindFirstChild('NameEsp'):Destroy()
+                    end
+                end
+            end)
+        end
+    end
+
 	Number = math.random(1, 1000000)
 	function UpdatePlayerChams()
 		for i,v in pairs(game:GetService'Players':GetChildren()) do
@@ -4040,7 +4184,7 @@ Dungeon:Toggle("ESP Flower",espflower,function(a)
 							name.BackgroundTransparency = 1
 							name.TextStrokeTransparency = 0.5
 							if v.Team == game.Players.LocalPlayer.Team then
-								name.TextColor3 = Color3.new(0,255,0)
+								name.TextColor3 = Color3.fromRGB(255, 255, 255)
 							else
 								name.TextColor3 = Color3.new(255,0,0)
 							end
@@ -4756,6 +4900,29 @@ local args = {
 
 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
 end) 
+
+Misc:Seperator("State")
+    
+    Misc:Dropdown("Select Haki State",{"State 0","State 1","State 2","State 3","State 4","State 5"},function(value)
+        _G.SelectStateHaki = value
+    end)
+    
+    Misc:Button("Change Buso Haki State",function()
+        if _G.SelectStateHaki == "State 0" then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ChangeBusoStage",0)
+        elseif _G.SelectStateHaki == "State 1" then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ChangeBusoStage",1)
+        elseif _G.SelectStateHaki == "State 2" then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ChangeBusoStage",2)
+        elseif _G.SelectStateHaki == "State 3" then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ChangeBusoStage",3)
+        elseif _G.SelectStateHaki == "State 4" then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ChangeBusoStage",4)
+        elseif _G.SelectStateHaki == "State 5" then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("ChangeBusoStage",5)
+        end
+    end)
+
 
 Misc:Line()
    Misc:Button("Join Pirates Team",function()
@@ -5635,18 +5802,18 @@ function CheckLevel()
 			CFrameQ = CFrame.new(-9516.9931640625, 178.00651550293, 6078.4653320313)
 			CFrameMon = CFrame.new(-9545.7763671875, 69.619895935059, 6339.5615234375)
         elseif Lv == 2075 and Lv <= 2099 or SelectMonster == "Peanut Scout [Lv. 2075]" then
-            Ms = "Peanut Scout [Lv. 2075]"
-            NameQuest = "NutsIslandQuest"
+            Mon = "Peanut Scout [Lv. 2075]"
             QuestLv = 1
-            NameMon = "Peanut Scout"
+                NameQuest = "NutsIslandQuest"
+                NameMon = "Peanut Scout"
             CFrameQ = CFrame.new(-2105.53198, 37.2495995, -10195.5088, -0.766061664, 0, -0.642767608, 0, 1, 0, 0.642767608, 0, -0.766061664)
             CFrameMon = CFrame.new(-2126.47998, 192.095154, -10204.6553, 0.0779861137, -9.29044361e-08, 0.996954441, 6.59006432e-08, 1, 8.80332109e-08, -0.996954441, 5.88345728e-08, 0.0779861137)
         elseif Lv == 2100 and Lv <= 2124 or SelectMonster == "Peanut President [Lv. 2100]" then
-            Ms = "Peanut President [Lv. 2100]"
-            NameQuest = "NutsIslandQuest"
+            Mon = "Peanut President [Lv. 2100]"
             QuestLv = 2
-            NameMon = "Peanut President"
-            CFrameQ = CFrame.new(-2105.53198, 37.2495995, -10195.5088, -0.766061664, 0, -0.642767608, 0, 1, 0, 0.642767608, 0, -0.766061664)
+                NameQuest = "NutsIslandQuest"
+                NameMon = "Peanut President"
+            CFrameQuest = CFrame.new(-2104.3908691406, 38.104167938232, -10194.21875, 0, 0, -1, 0, 1, 0, 1, 0, 0)
             CFrameMon = CFrame.new(-2126.47998, 192.095154, -10204.6553, 0.0779861137, -9.29044361e-08, 0.996954441, 6.59006432e-08, 1, 8.80332109e-08, -0.996954441, 5.88345728e-08, 0.0779861137)
         elseif Lv == 2125 and Lv <= 2149 or SelectMonster == "Ice Cream Chef [Lv. 2125]" then
             Ms = "Ice Cream Chef [Lv. 2125]"
